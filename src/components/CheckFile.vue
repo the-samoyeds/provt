@@ -1,11 +1,10 @@
 <template>
-  <div class="hello">
-
+  <div>
       Check your file \o/
+      <drop v-on:dropped="dropFile"></drop>
 
-  </br></br>
-  <router-link :to="{ name: 'AddFile'}">Add File</router-link>
-
+      </br></br>
+      <router-link :to="{ name: 'AddFile'}">Add File</router-link>
   </div>
 </template>
 
@@ -13,9 +12,13 @@
 /* global web3 */
 
 const SimpleStore = require('../abi/simple_store');
+import Drop from './Drop';
 
 export default {
-  name: 'HelloWorld',
+  name: 'CheckFile',
+  components: {
+      drop: Drop,
+  },
 
   data() {
     return {
@@ -32,6 +35,10 @@ export default {
       SimpleStoreContract.get.call((err, data) => {
         this.value = data;
       });
+    },
+
+    dropFile() {
+        console.log('drop on check');
     },
   },
 

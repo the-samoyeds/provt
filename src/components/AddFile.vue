@@ -10,9 +10,7 @@
           </ul>
           <p>{{ value }}</p>
           <button v-on:click="callContract">Call</button>
-          <div id="drop_zone" v-on:drop="drop_handler" v-on:dragover="dragover_handler" v-on:dragend="dragend_handler">
-            <span class="drop_text">Drag your file to this Drop Zone ...</span>
-          </div>
+          <drop v-on:dropped="dropFile"></drop>
       </div>
       <div v-else>
           Create an account on <a href="https://metamask.io/" target="_blank">Metamask</a>
@@ -25,16 +23,21 @@
 /* global web3 */
 
 const SimpleStore = require('../abi/simple_store');
+import Drop from './Drop';
 
 export default {
   name: 'AddFile',
 
-  data() {
-    return {
-      accounts: {},
-      value: null,
-    };
+  components: {
+      drop: Drop,
   },
+
+    data() {
+      return {
+        accounts: {},
+        value: null,
+      };
+    },
 
   methods: {
     callContract() {
@@ -45,42 +48,9 @@ export default {
         this.value = data;
       });
     },
-    drop_handler(ev) {
-      console.log('Drop');
-      ev.preventDefault();
-      // If dropped items aren't files, reject them
-      var dt = ev.dataTransfer;
-      if (dt.items) {
-        // Use DataTransferItemList interface to access the file(s)
-        for (var i=0; i < dt.items.length; i++) {
-          if (dt.items[i].kind == "file") {
-            var f = dt.items[i].getAsFile();
-            console.log("... file[" + i + "].name = " + f.name);
-          }
-        }
-      } else {
-        // Use DataTransfer interface to access the file(s)
-        for (var i=0; i < dt.files.length; i++) {
-          console.log("... file[" + i + "].name = " + dt.files[i].name);
-        }
-      }
-    },
-    dragover_handler(ev) {
-      console.log('dragover_handler');
-      ev.preventDefault();
-    },
-    dragend_handler(ev) {
-      console.log('dragend_handler');
-      var dt = ev.dataTransfer;
-      if (dt.items) {
-        // Use DataTransferItemList interface to remove the drag data
-        for (var i = 0; i < dt.items.length; i++) {
-          dt.items.remove(i);
-        }
-      } else {
-        // Use DataTransfer interface to remove the drag data
-        ev.dataTransfer.clearData();
-      }
+
+    dropFile() {
+        console.log('drop on add');
     },
   },
 
