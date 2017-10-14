@@ -1,13 +1,11 @@
 <template>
   <div class="hello">
-    <h2>Accounts</h2>
-    <ul>
-      <li v-for="(balance, account) in accounts" :key="account">
-        <code>{{ account }}</code>: {{ balance }} eth
-      </li>
-    </ul>
-    <p>{{ value }}</p>
-    <button v-on:click="callContract">Call</button>
+
+      Check your file \o/
+
+  </br></br>
+  <router-link :to="{ name: 'AddFile'}">Add File</router-link>
+
   </div>
 </template>
 
@@ -42,6 +40,7 @@ export default {
 
     const accounts = web3.eth.accounts;
     const balances = {};
+
 
     for (let i = 0; i < accounts.length; i += 1) {
       const account = accounts[i];
