@@ -8,7 +8,7 @@
           ADD FILE
       </router-link>
 
-      <div v-if="haveAccount" class="full">
+      <metamask-checker>
         <div v-show="!isLoading" class="full">
           Is this the file you were looking for?
           <drop v-on:dropped="dropFile"></drop>
@@ -17,11 +17,7 @@
           <stretch></stretch></br>
           Validating your file... Hold on tight!
         </div>
-      </div>
-
-      <div v-else>
-          Create an account on <a href="https://metamask.io/" target="_blank">Metamask</a>
-      </div>
+      </metamask-checker>
   </div>
 </template>
 
@@ -31,18 +27,18 @@
 import Stretch from 'vue-loading-spinner/src/components/Stretch';
 import Provt from '../abi/provt';
 import Drop from './Drop';
+import MetaMaskChecker from './MetaMaskChecker';
 
 export default {
   name: 'CheckFile',
   components: {
     drop: Drop,
     Stretch,
+    'metamask-checker': MetaMaskChecker,
   },
 
   data() {
     return {
-      accounts: {},
-      value: null,
       isLoading: false,
     };
   },
@@ -62,26 +58,6 @@ export default {
           this.$router.push({ path: `/file/${data[2]}` });
         });
     },
-  },
-
-  created() {
-    if (web3 === 'undefined') return;
-
-    const accounts = web3.eth.accounts;
-    const balances = {};
-
-    for (let i = 0; i < accounts.length; i += 1) {
-      const account = accounts[i];
-      web3.eth.getBalance(account, (err, balance) => {
-        balances[account] = web3.fromWei(balance.toNumber(), 'ether');
-        this.accounts = balances;
-      });
-    }
-    if (accounts.length > 0) {
-      this.haveAccount = true;
-    } else {
-      this.haveAccount = false;
-    }
   },
 };
 </script>
