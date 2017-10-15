@@ -48,10 +48,9 @@
 <script>
 /* global web3 */
 
-const SHA3_256 = require('js-sha3').sha3_256;
-const Provt = require('../abi/provt');
-
+import SHA3_256 from 'js-sha3';
 import Drop from './Drop';
+import Provt from '../abi/provt';
 
 export default {
   name: 'AddFile',
@@ -83,14 +82,14 @@ export default {
       // }
 
       // TODO: Create contract.
-      let provtFileContract = new web3.auth.Contract(Provt);
+      const provtFileContract = new web3.auth.Contract(Provt);
       provtFileContract.deploy({
         data: '',
-        arguments: ['']
+        arguments: [''],
       }).send({
         from: '',
         gas: '',
-        gasPrice: ''
+        gasPrice: '',
       });
 
       // TODO: POST transaction to backend.
@@ -99,11 +98,11 @@ export default {
     dropFile(name, digest) {
       this.name = name;
       this.fileDigest = digest;
-      this.metadataDigest = SHA3_256(this.name + this.description + this.fileDigest);
+      this.metadataDigest = SHA3_256.sha3_256(this.name + this.description + this.fileDigest);
     },
 
     calculateMetaDigest() {
-      this.metadataDigest = SHA3_256(this.name + this.description + this.fileDigest);
+      this.metadataDigest = SHA3_256.sha3_256(this.name + this.description + this.fileDigest);
     },
   },
 

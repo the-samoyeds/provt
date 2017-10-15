@@ -30,16 +30,15 @@
 <script>
 /* global web3 */
 
-const SimpleStore = require('../abi/simple_store');
-const Provt = require('../abi/provt');
-import Stretch from 'vue-loading-spinner/src/components/Stretch'
+import Stretch from 'vue-loading-spinner/src/components/Stretch';
+import Provt from '../abi/provt';
 import Drop from './Drop';
 
 export default {
   name: 'CheckFile',
   components: {
-      drop: Drop,
-      Stretch
+    drop: Drop,
+    Stretch,
   },
 
   data() {
@@ -59,9 +58,6 @@ export default {
       ProvtFileContract.getFile(digest, (err, data) => {
         this.fileBlockchain = data;
       });
-
-      // file = getFileInfo(fileBlockchain.creator, fileBlockchain.hash, fileBlockchain.metadataHash) => L function to return the file info
-      // do something important :)
     },
   },
 
@@ -79,9 +75,9 @@ export default {
       });
     }
     if (accounts.length > 0) {
-        this.haveAccount = true;
+      this.haveAccount = true;
     } else {
-        this.haveAccount = false;
+      this.haveAccount = false;
     }
   },
 };

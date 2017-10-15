@@ -10,25 +10,26 @@ const SHA3_256 = require('js-sha3').sha3_256;
 export default {
   name: 'Drop',
   methods: {
-      dropHandler(ev) {
-          ev.preventDefault();
-          const file = ev.dataTransfer.files[0];
+    dropHandler(ev) {
+      ev.preventDefault();
+      const file = ev.dataTransfer.files[0];
 
-          let fileReader = new FileReader();
+      const fileReader = new FileReader();
 
-          // FileReader is muy async.
-          let self = this;
-          fileReader.onloadend = function () {
-            self.$emit('dropped', file.name, SHA3_256(this.result));
-          };
+      // FileReader is muy async.
+      const self = this;
+      fileReader.onloadend = () => {
+        self.$emit('dropped', file.name, SHA3_256(this.result));
+      };
 
-          fileReader.readAsBinaryString(file);
-      },
-      dragoverHandler(ev) {
-          ev.preventDefault();
-          this.$emit('dragged-over');
-      },
-  }
+      fileReader.readAsBinaryString(file);
+    },
+
+    dragoverHandler(ev) {
+      ev.preventDefault();
+      this.$emit('dragged-over');
+    },
+  },
 };
 </script>
 
