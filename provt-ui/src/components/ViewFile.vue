@@ -16,7 +16,7 @@
     <file :file="fileInfo" v-show="Object.keys(fileInfo).length > 0"></file>
 
     <h2>Transaction</h2>
-    <transaction :transaction="txInfo" v-show="txInfo.blockNumber"></transaction>
+    <transaction :transaction="txInfo"></transaction>
   </div>
 
   <p class="view-file-try-again">
@@ -54,7 +54,7 @@ export default {
 
   computed: {
     displayFilename() {
-      let displayFilename;
+      let displayFilename = '';
       const maxFilenameLength = 30;
 
       const uploadedFilename = this.$route.params.filename;
@@ -62,7 +62,7 @@ export default {
       if (uploadedFilename) {
         displayFilename = uploadedFilename;
       } else {
-        displayFilename = this.fileInfo ? this.fileInfo.filename : '';
+        displayFilename = (this.fileInfo && this.fileInfo.filename) ? this.fileInfo.filename : '';
       }
 
       return `${displayFilename.substring(0, maxFilenameLength)}${displayFilename.length > maxFilenameLength ? '...' : ''}`;
