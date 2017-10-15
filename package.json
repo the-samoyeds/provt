@@ -1,7 +1,7 @@
 {
   "name": "provt",
   "version": "1.0.0",
-  "description": "Ask question and \"provt\"",
+  "description": "Find out if your file is the one you were looking for",
   "author": "Luiz Aoqui <laoqui@ca.ibm.com>",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
   "dependencies": {
     "js-sha3": "^0.6.1",
     "vue": "^2.4.2",
+    "vue-loading-spinner": "^1.0.11",
     "vue-router": "^2.7.0"
   },
   "devDependencies": {

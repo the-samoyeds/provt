@@ -1,10 +1,21 @@
 <template>
-  <div>
-      Check your file \o/
-      <drop v-on:dropped="dropFile"></drop>
+  <div style="height: 100%;">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
 
-      </br></br>
-      <router-link :to="{ name: 'AddFile'}">Add File</router-link>
+      <router-link :to="{ name: 'AddFile'}" class="add-btn">
+          <i class="material-icons add-icon">note_add</i>
+          ADD FILE
+      </router-link>
+
+      <div v-show="!isLoading" style="height: 100%;">
+        Is this the file you were looking for?
+        <drop v-on:dropped="dropFile"></drop>
+      </div>
+      <div v-show="isLoading">
+        <stretch></stretch></br>
+        Validating your file... Hold on tight!
+      </div>
   </div>
 </template>
 
@@ -12,18 +23,21 @@
 /* global web3 */
 
 const SimpleStore = require('../abi/simple_store');
+import Stretch from 'vue-loading-spinner/src/components/Stretch'
 import Drop from './Drop';
 
 export default {
   name: 'CheckFile',
   components: {
       drop: Drop,
+      Stretch
   },
 
   data() {
     return {
       accounts: {},
       value: null,
+      isLoading: false,
     };
   },
 
@@ -38,7 +52,12 @@ export default {
     },
 
     dropFile() {
-        console.log('drop on check');
+      this.isLoading = true;
+      console.log('drop on check');
+      // hash = calculateHash() => H function to create hash
+      // fileBlockchain = getFile(hash);  => call to B function on blockchain
+      // file = getFileInfo(fileBlockchain.creator, fileBlockchain.hash, fileBlockchain.metadataHash) => L function to return the file info
+      // do something important :)
     },
   },
 
@@ -47,7 +66,6 @@ export default {
 
     const accounts = web3.eth.accounts;
     const balances = {};
-
 
     for (let i = 0; i < accounts.length; i += 1) {
       const account = accounts[i];
@@ -77,6 +95,30 @@ li {
 }
 
 a {
-  color: #42b983;
+  color: #024669;
+  text-decoration: none;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 25px;
 }
+
+.add-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 94px;
+}
+
+.add-btn:hover {
+    cursor: pointer;
+}
+
+.add-icon {
+  font-size: 60px;
+  color: #024669;
+}
+
+#drop_zone {
+  height: calc(100% - 130px);
+}
+
 </style>
