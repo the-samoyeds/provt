@@ -8,9 +8,14 @@
           ADD FILE
       </router-link>
 
-      Is this the file you were looking for?
-      <drop v-on:dropped="dropFile"></drop>
-
+      <div v-show="!isLoading" style="height: 100%;">
+        Is this the file you were looking for?
+        <drop v-on:dropped="dropFile"></drop>
+      </div>
+      <div v-show="isLoading">
+        <stretch></stretch></br>
+        Validating your file... Hold on tight!
+      </div>
   </div>
 </template>
 
@@ -18,19 +23,21 @@
 /* global web3 */
 
 const SimpleStore = require('../abi/simple_store');
+import Stretch from 'vue-loading-spinner/src/components/Stretch'
 import Drop from './Drop';
-var isLoading = false;
 
 export default {
   name: 'CheckFile',
   components: {
       drop: Drop,
+      Stretch
   },
 
   data() {
     return {
       accounts: {},
       value: null,
+      isLoading: false,
     };
   },
 
@@ -45,11 +52,12 @@ export default {
     },
 
     dropFile() {
-        console.log('drop on check');
-        // hash = calculateHash() => H function to create hash
-        // fileBlockchain = getFile(hash);  => call to B function on blockchain
-        // file = getFileInfo(fileBlockchain.creator, fileBlockchain.hash, fileBlockchain.metadataHash) => L function to return the file info
-
+      this.isLoading = true;
+      console.log('drop on check');
+      // hash = calculateHash() => H function to create hash
+      // fileBlockchain = getFile(hash);  => call to B function on blockchain
+      // file = getFileInfo(fileBlockchain.creator, fileBlockchain.hash, fileBlockchain.metadataHash) => L function to return the file info
+      // do something important :)
     },
   },
 
@@ -58,7 +66,6 @@ export default {
 
     const accounts = web3.eth.accounts;
     const balances = {};
-
 
     for (let i = 0; i < accounts.length; i += 1) {
       const account = accounts[i];
