@@ -1,11 +1,17 @@
 <template>
 <div>
-  <h1>File Information</h1>
+  <h1>Found {{this.$route.params.filename ? this.$route.params.filename : this.fileInfo.filename}} on the Blockchain</h1>
 
   <p v-show="error">
     <b>Ooops!</b> {{ error }}
   </p>
 
+  <h2>User Profile</h2>
+  <pre v-show="Object.keys(profileInfo).length > 0">
+    {{ JSON.stringify(profileInfo, null, 2) }}
+  </pre>
+
+  <h2>File Information</h2>
   <pre v-show="Object.keys(fileInfo).length > 0">
     {{ JSON.stringify(fileInfo, null, 2) }}
   </pre>
@@ -24,6 +30,7 @@ export default {
     return {
       error: '',
       fileInfo: {},
+      profileInfo: {},
     };
   },
 
@@ -45,6 +52,25 @@ export default {
         }
 
         this.fileInfo = resp.body[0];
+
+
+        request
+          .get('/api/profile')
+          .query({ fileDigest: fileDigest.substring(2, fileDigest.length) })
+          .end((err2, resp2) => {
+            if (err2) {
+              this.error = 'Failed to load file information. Please try again.';
+              return;
+            }
+
+            if (resp2.body.length < 1) {
+              // this.error = 'User not found!';
+              // return;
+              this.profileInfo = { address: this.fileInfo.owner };
+            } else {
+              this.profileInfo = resp2.body[0];
+            }
+          });
       });
   },
 };

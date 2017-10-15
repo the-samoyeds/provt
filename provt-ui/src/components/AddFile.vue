@@ -56,6 +56,7 @@ export default {
 
   data() {
     return {
+      filename: null,
       name: null,
       description: null,
       fileDigest: null,
@@ -79,8 +80,10 @@ export default {
           request
             .post('/api/file')
             .send({
+              owner: web3.eth.defaultAccount,
               fileDigest: this.fileDigest,
               metadataDigest: this.metadataDigest,
+              filename: this.filename,
               name: this.name,
               description: this.description,
               txid: resp,
@@ -97,6 +100,7 @@ export default {
     },
 
     dropFile(name, digest) {
+      this.filename = name;
       this.name = name;
       this.fileDigest = digest;
       this.metadataDigest = SHA3_256.sha3_256(this.name + this.description + this.fileDigest);

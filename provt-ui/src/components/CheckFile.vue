@@ -53,7 +53,7 @@ export default {
             return;
           }
 
-          this.$router.push({ path: `/file/${data[1]}` });
+          this.$router.push({ path: `/file/${data[1]}/${name}` });
         });
     },
   },
