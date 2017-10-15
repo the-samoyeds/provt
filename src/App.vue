@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-    <img src="./assets/mic.jpeg">
+  <div id="app" style="height: 100%;">
     <router-view/>
   </div>
 </template>

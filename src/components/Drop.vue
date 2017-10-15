@@ -1,6 +1,6 @@
 <template>
     <div id="drop_zone" v-on:drop="dropHandler" v-on:dragover="dragoverHandler">
-      <span class="drop_text">Drag your file to this Drop Zone ...</span>
+      <span class="drop_text">Drag and drop your file here</span>
     </div>
 </template>
 
@@ -23,9 +23,9 @@ export default {
 <style>
     #drop_zone {
       border: 1px dashed skyblue;
-      width: 70%;
+      width: 80%;
       height: 120px;
-      margin-left: 15%;
+      margin-left: 10%;
       margin-top: 20px;
     }
 

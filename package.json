@@ -1,7 +1,7 @@
 {
-  "name": "weansr",
+  "name": "provt",
   "version": "1.0.0",
-  "description": "Ask question and \"weansr\"",
+  "description": "Find out if your file is the one you were looking for",
   "author": "Luiz Aoqui <laoqui@ca.ibm.com>",
   "private": true,
   "scripts": {

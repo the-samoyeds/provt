@@ -1,10 +1,16 @@
 <template>
-  <div>
-      Check your file \o/
+  <div style="height: 100%;">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+
+      <router-link :to="{ name: 'AddFile'}" class="add-btn">
+          <i class="material-icons add-icon">note_add</i>
+          ADD FILE
+      </router-link>
+
+      Is this the file you were looking for?
       <drop v-on:dropped="dropFile"></drop>
 
-      </br></br>
-      <router-link :to="{ name: 'AddFile'}">Add File</router-link>
   </div>
 </template>
 
@@ -13,6 +19,7 @@
 
 const SimpleStore = require('../abi/simple_store');
 import Drop from './Drop';
+var isLoading = false;
 
 export default {
   name: 'CheckFile',
@@ -39,6 +46,10 @@ export default {
 
     dropFile() {
         console.log('drop on check');
+        // hash = calculateHash() => H function to create hash
+        // fileBlockchain = getFile(hash);  => call to B function on blockchain
+        // file = getFileInfo(fileBlockchain.creator, fileBlockchain.hash, fileBlockchain.metadataHash) => L function to return the file info
+
     },
   },
 
@@ -77,6 +88,30 @@ li {
 }
 
 a {
-  color: #42b983;
+  color: #024669;
+  text-decoration: none;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 25px;
 }
+
+.add-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 94px;
+}
+
+.add-btn:hover {
+    cursor: pointer;
+}
+
+.add-icon {
+  font-size: 60px;
+  color: #024669;
+}
+
+#drop_zone {
+  height: calc(100% - 130px);
+}
+
 </style>
