@@ -1,79 +1,110 @@
 <template>
   <div>
+    <div v-if="haveAccount">
+      <div v-show="file">
+        <form>
+          <label for="name">Name</label>
+          <input v-model="name" type="text" name="name"></input>
+          <br/>
 
-      <div v-if="haveAccount">
-          <h2>Accounts</h2>
-          <ul>
-            <li v-for="(balance, account) in accounts" :key="account">
-              <code>{{ account }}</code>: {{ balance }} eth
-            </li>
-          </ul>
-          <p>{{ value }}</p>
-          <button v-on:click="callContract">Call</button>
-          <drop v-on:dropped="dropFile"></drop>
-      </div>
-      <div v-else>
-          Create an account on <a href="https://metamask.io/" target="_blank">Metamask</a>
-      </div>
+          <label for="description">Description</label>
+          <input v-model="description" type="text" name="description"></input>
+          <br/>
 
+          <label for="fileDigest">fileDigest</label>
+          <input v-model="fileDigest" type="text" name="fileDigest"></input>
+          <br/>
+
+          <!-- TODO: Implement "Add extra field" button. -->
+
+          <!-- TODO: Disable button until `readyForSubmission` -->
+          <button v-on:click="submitHandler">Submit</button>
+        </form>
+      </div>
+      <div v-show="!file">
+        <drop v-on:dropped="dropFile"></drop>
+      </div>
+    </div>
+    <div v-else>
+      Create an account on
+      <a href="https://metamask.io/" target="_blank">MetaMask</a>
+    </div>
   </div>
 </template>
 
 <script>
 /* global web3 */
 
-const SimpleStore = require('../abi/simple_store');
+const SHA3_256 = require('js-sha3').sha3_256;
+const Provt = require('../abi/provt');
+
 import Drop from './Drop';
 
 export default {
   name: 'AddFile',
 
   components: {
-      drop: Drop,
+    drop: Drop,
   },
 
-    data() {
-      return {
-        accounts: {},
-        value: null,
-      };
+  data() {
+    return {
+      file: null,
+      name: null,
+      description: null,
+      fileDigest: null,
+    };
+  },
+
+  computed: {
+    metadataDigest: function () {
+      return SHA3_256(this.name + this.description + this.fileDigest);
     },
+  },
 
   methods: {
-    callContract() {
+    submitHandler() {
       if (web3 === 'undefined') return;
 
-      const SimpleStoreContract = web3.eth.contract(SimpleStore).at('0x893173504b95dd72a323ad1cac246b23808924cf');
-      SimpleStoreContract.get.call((err, data) => {
-        this.value = data;
+      // TODO: POST form to backend.
+
+      // TODO: Create contract.
+      let provtFileContract = new web3.auth.Contract(Provt);
+      provtFileContract.deploy({
+        data: '',
+        arguments: ['']
+      }).send({
+        from: '',
+        gas: '',
+        gasPrice: ''
       });
+
+      // TODO: POST transaction to backend.
     },
 
-    dropFile() {
-        console.log('drop on add');
+    dropFile(event) {
+      this.file = event.dataTransfer.files[0];
+      this.name = this.file.name;
+
+      let fileReader = new FileReader();
+
+      // FileReader is muy async.
+      let self = this;
+      fileReader.onloadend = function (event) {
+        self.fileDigest = SHA3_256(this.result);
+      };
+
+      fileReader.readAsBinaryString(this.file);
     },
+  },
+
+  readyForSubmission() {
+    return this.fileDigest && this.metadataDigest;
   },
 
   created() {
     if (web3 === 'undefined') return;
-
-    const accounts = web3.eth.accounts;
-    const balances = {};
-
-
-    for (let i = 0; i < accounts.length; i += 1) {
-      const account = accounts[i];
-      web3.eth.getBalance(account, (err, balance) => {
-        balances[account] = web3.fromWei(balance.toNumber(), 'ether');
-        this.accounts = balances;
-      });
-    }
-
-    if (accounts.length > 0) {
-        this.haveAccount = true;
-    } else {
-        this.haveAccount = false;
-    }
+    this.haveAccount = web3.eth.accounts.length > 0;
   },
 };
 </script>
@@ -107,8 +138,8 @@ a {
 }
 
 .drop_text {
-    font-size: 20px;
-    position: relative;
-    top: 46px;
+  font-size: 20px;
+  position: relative;
+  top: 46px;
 }
 </style>
