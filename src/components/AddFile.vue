@@ -1,15 +1,6 @@
 <template>
   <div>
     <div v-if="haveAccount">
-      <!-- <h2>Accounts</h2>
-      <ul>
-        <li v-for="(balance, account) in accounts" :key="account">
-          <code>{{ account }}</code>: {{ balance }} eth
-        </li>
-      </ul>
-      <p>{{ value }}</p>
-      <button v-on:click="callContract">Call</button> -->
-
       <div v-show="file">
         <form>
           <label for="name">Name</label>
@@ -26,7 +17,8 @@
 
           <!-- TODO: Implement "Add extra field" button. -->
 
-          <button v-on:click="callContract">Submit</button>
+          <!-- TODO: Disable button until `readyForSubmission` -->
+          <button v-on:click="submitHandler">Submit</button>
         </form>
       </div>
       <div v-show="!file">
@@ -43,7 +35,6 @@
 <script>
 /* global web3 */
 
-const Keccak256 = require('js-sha3').keccak256;
 const SHA3_256 = require('js-sha3').sha3_256;
 const Provt = require('../abi/provt');
 
@@ -67,60 +58,39 @@ export default {
 
   computed: {
     metadataDigest: function () {
-      console.log('ulala');
-      const digest = SHA3_256(this.name + this.description + this.fileDigest);
-      return digest;
+      return SHA3_256(this.name + this.description + this.fileDigest);
     },
   },
 
   methods: {
-    // callContract() {
-    //   if (web3 === 'undefined') return;
-    //
-    //   const SimpleStoreContract = web3.eth.contract(SimpleStore).at('0x893173504b95dd72a323ad1cac246b23808924cf');
-    //   SimpleStoreContract.get.call((err, data) => {
-    //     this.value = data;
-    //   });
-    // },
-
-    // getDigest(data) {
-    //   let hash = SHA3.SHA3Hash(256);
-    //   hash.update(data);
-    //   return hash.digest('hex');
-    // },
-
-    callContract(event) {
+    submitHandler() {
       if (web3 === 'undefined') return;
 
-      console.log(event.target);
+      // TODO: POST form to backend.
 
-      const fileData = null;
-      const fileMetadata = null;
+      // TODO: Create contract.
+      let provtFileContract = new web3.auth.Contract(Provt);
+      provtFileContract.deploy({
+        data: '',
+        arguments: ['']
+      }).send({
+        from: '',
+        gas: '',
+        gasPrice: ''
+      });
 
-      // const fileDigest = Keccak256(fileData);
-      const fileDigest = SHA3_256(fileData);
-      // const metadataDigest = Keccak256(fileMetadata);;
-      const metadataDigest = SHA3_256(fileMetadata);;
-
-      console.log('fileDigest: ' + fileDigest);
-      console.log('fileMetadataDigest: ' + fileMetadataDigest);
+      // TODO: POST transaction to backend.
     },
 
     dropFile(event) {
-      console.log(event.dataTransfer);
-      console.log(event.dataTransfer.files);
-
       this.file = event.dataTransfer.files[0];
-      console.log(this.file);
-
       this.name = this.file.name;
 
       let fileReader = new FileReader();
+
+      // FileReader is muy async.
       let self = this;
       fileReader.onloadend = function (event) {
-        // console.log(Keccak256(this.result));
-        // console.log(SHA3_256(this.result));
-
         self.fileDigest = SHA3_256(this.result);
       };
 
