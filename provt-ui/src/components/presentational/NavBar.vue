@@ -6,15 +6,15 @@
 
   <ul class="navbar-nav header-menu mt-2 mt-lg-0 ">
     <li class="nav-item menu-option">
-      <router-link to="/">
-        <i class="material-icons icon">check_circle</i>
-        CHECK FILE
-      </router-link>
-    </li>
-    <li class="nav-item menu-option">
       <router-link to="/addfile">
         <i class="material-icons icon">note_add</i>
         ADD FILE
+      </router-link>
+    </li>
+    <li class="nav-item menu-option">
+      <router-link to="/">
+        <i class="material-icons icon">check_circle</i>
+        CHECK FILE
       </router-link>
     </li>
   </ul>
@@ -51,7 +51,4 @@
   vertical-align: middle;
 }
 
-.menu-text {
-
-}
 </style>

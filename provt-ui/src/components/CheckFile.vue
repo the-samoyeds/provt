@@ -1,9 +1,5 @@
 <template>
   <div class="full">
-    <router-link to="/addfile" class="add-btn">
-      <i class="material-icons add-icon">note_add</i>
-      ADD FILE
-    </router-link>
 
     <metamask-checker>
       <div v-show="isLoading">

@@ -1,9 +1,5 @@
 <template>
   <div class="full">
-    <router-link to="/" class="add-btn">
-      <i class="material-icons add-icon">check_circle</i>
-      CHECK FILE
-    </router-link>
 
     <metamask-checker>
 
