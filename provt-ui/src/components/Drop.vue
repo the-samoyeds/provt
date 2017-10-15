@@ -43,6 +43,7 @@ export default {
         self.$emit('dropped', file.name, SHA3_256.sha3_256(this.result));
       };
 
+      this.over = false;
       this.isLoading = true;
 
       fileReader.readAsBinaryString(file);

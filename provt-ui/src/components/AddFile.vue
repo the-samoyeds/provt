@@ -41,6 +41,7 @@
 /* global web3 */
 
 import SHA3_256 from 'js-sha3';
+import request from 'superagent';
 import Drop from './Drop';
 import MetaMaskChecker from './MetaMaskChecker';
 import Provt from '../abi/provt';
@@ -63,30 +64,36 @@ export default {
   },
 
   methods: {
-    submitHandler() {
+    submitHandler(ev) {
+      ev.preventDefault();
+
       if (web3 === 'undefined') return;
 
-      // TODO: POST form to backend.
-      // {
-      //   "file": {
-      //     "name": "...",
-      //     "description": "...",
-      //     "digest": "...",
-      //   }
-      // }
+      web3.eth.contract(Provt).at('0x0c89ed690c343654d9b258872b4fd91a851459b1')
+        .addFile.sendTransaction(`0x${this.fileDigest}`, `0x${this.metadataDigest}`, (err, resp) => {
+          if (err) {
+            console.error(err); // eslint-disable-line no-console
+            return;
+          }
 
-      // TODO: Create contract.
-      const provtFileContract = new web3.auth.Contract(Provt);
-      provtFileContract.deploy({
-        data: '',
-        arguments: [''],
-      }).send({
-        from: '',
-        gas: '',
-        gasPrice: '',
-      });
+          request
+            .post('/api/file')
+            .send({
+              fileDigest: this.fileDigest,
+              metadataDigest: this.metadataDigest,
+              name: this.name,
+              description: this.description,
+              txid: resp,
+            })
+            .end((err2) => {
+              if (err2) {
+                console.error('Failed to save file information. Please try again.'); // eslint-disable-line no-console
+                return;
+              }
 
-      // TODO: POST transaction to backend.
+              this.$router.push({ path: `/file/0x${this.fileDigest}` });
+            });
+        });
     },
 
     dropFile(name, digest) {
