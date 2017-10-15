@@ -3,26 +3,20 @@ volumes:
   mongo-data:
 services:
   proxy:
-    image: nginx:stable
+    build: ./provt-proxy
+    image: samoyeds/provt-proxy:0.1.1
     ports:
       - "8080:80"
     volumes_from:
-      - proxy-conf
       - provt
     links:
       - provt-server
-  proxy-conf:
-    build: ./provt-proxy-conf
-    image: samoyeds/provt-nginx-conf:0.1.1
-    entrypoint: /bin/true
-    volumes:
-      - /etc/nginx/conf.d
   provt:
     build: ./provt-ui
     image: samoyeds/provt:0.1.1
     entrypoint: /bin/true
-    volumes:
-      - /app/dist
+    # volumes:
+    #   - /app/dist
 
   provt-server:
     build: ./provt-server
