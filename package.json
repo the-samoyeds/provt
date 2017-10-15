@@ -1,7 +1,7 @@
 {
-  "name": "weansr",
+  "name": "provt",
   "version": "1.0.0",
-  "description": "Ask question and \"weansr\"",
+  "description": "Ask question and \"provt\"",
   "author": "Luiz Aoqui <laoqui@ca.ibm.com>",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "js-sha3": "^0.6.1",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0"
   },

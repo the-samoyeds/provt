@@ -10,7 +10,7 @@ export default {
   methods: {
       dropHandler(ev) {
           ev.preventDefault();
-          this.$emit('dropped');
+          this.$emit('dropped', ev);
       },
       dragoverHandler(ev) {
           ev.preventDefault();
