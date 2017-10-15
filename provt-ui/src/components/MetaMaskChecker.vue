@@ -28,6 +28,7 @@ export default {
         clearInterval(checker);
         self.metamaskReady = true;
         window.web3 = new Web3(web3.currentProvider);
+        self.$emit('web3-ready');
       }
     }, 500);
   },

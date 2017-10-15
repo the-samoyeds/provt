@@ -1,44 +1,108 @@
 <template>
-<div>
-  <p v-show="error">
-    <h1>Could not find {{this.$route.params.filename}} on the Blockchain</h1>
+<metamask-checker v-on:web3-ready="web3Loaded">
+  <div v-show="error">
+    <h1>Could not find "{{ displayFilename }}" on the Blockchain</h1>
 
     <b>Ooops!</b> {{ error }}
-  </p>
+  </div>
 
   <div v-show="!error">
-    <h1>Found {{this.$route.params.filename ? this.$route.params.filename : this.fileInfo.filename}} on the Blockchain</h1>
+    <h1>Found "{{ displayFilename }}" on the Blockchain</h1>
 
     <h2>User Profile</h2>
-    <pre v-show="Object.keys(profileInfo).length > 0">
+    <pre v-show="profileInfo && Object.keys(profileInfo).length > 0">
       {{ JSON.stringify(profileInfo, null, 2) }}
     </pre>
 
     <h2>File Information</h2>
-    <pre v-show="Object.keys(fileInfo).length > 0">
+    <pre v-show="fileInfo && Object.keys(fileInfo).length > 0">
       {{ JSON.stringify(fileInfo, null, 2) }}
+    </pre>
+
+    <h2>Transaction</h2>
+    <p v-show="transaction && !transaction.blockNumber">
+      Transaction still pending...
+    </p>
+    <pre v-show="transaction && transaction.blockNumber">
+      {{ JSON.stringify(transaction, null, 2) }}
     </pre>
   </div>
 
   <p class="view-file-try-again">
     <router-link to="/">Check another file</router-link>
   </p>
-</div>
+</metamask-checker>
 </template>
 
 <script>
+/* global web3 */
+
 import request from 'superagent';
+import MetaMaskChecker from './MetaMaskChecker';
 
 export default {
+  components: {
+    'metamask-checker': MetaMaskChecker,
+  },
+
   data() {
     return {
       error: '',
-      fileInfo: {},
-      profileInfo: {},
+      fileInfo: null,
+      profileInfo: null,
+      transaction: null,
+      web3Ready: false,
     };
   },
 
-  created() {
+  computed: {
+    displayFilename() {
+      let displayFilename;
+      const maxFilenameLength = 30;
+
+      const uploadedFilename = this.$route.params.filename;
+
+      if (uploadedFilename) {
+        displayFilename = uploadedFilename;
+      } else {
+        displayFilename = this.fileInfo ? this.fileInfo.filename : '';
+      }
+
+      return `${displayFilename.substring(0, maxFilenameLength)}${displayFilename.length > maxFilenameLength ? '...' : ''}`;
+    },
+  },
+
+  methods: {
+    web3Loaded() {
+      this.web3Ready = true;
+      this.loadTransaction();
+    },
+
+    loadTransaction() {
+      if (!this.web3Ready || !this.fileInfo) {
+        // not ready yet
+        return;
+      }
+
+      const txid = this.fileInfo.txid;
+      web3.eth.getTransaction(txid, (err, tx) => {
+        if (err) {
+          this.error = 'Failed to load transaction for file. Please try again.';
+          return;
+        }
+
+        this.transaction = tx;
+
+        if (!tx.blockNumber) {
+          // transaction still pending, let's check back on it again later
+          const self = this;
+          setTimeout(self.loadTransaction, 1000);
+        }
+      });
+    },
+  },
+
+  mounted() {
     const fileDigest = this.$route.params.digest;
 
     request
@@ -56,7 +120,7 @@ export default {
         }
 
         this.fileInfo = resp.body[0];
-
+        this.loadTransaction();
 
         request
           .get('/api/profile')
@@ -82,6 +146,6 @@ export default {
 
 <style scoped>
 .view-file-try-again {
-  margin-top: 120px;
+  margin-top: 60px;
 }
 </style>
