@@ -1,4 +1,6 @@
 version: "2"
+volumes:
+  mongo-data:
 services:
   proxy:
     image: nginx:stable
@@ -35,3 +37,5 @@ services:
 
   mongo:
     image: mongo:3.4
+    volumes:
+      - mongo-data:/data/db
