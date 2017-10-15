@@ -1,0 +1,6 @@
+FROM busybox
+MAINTAINER The Samoyeds <github.com/the-samoyeds>
+
+COPY provt-nginx.conf /etc/nginx/nginx.conf
+
+VOLUME /etc/nginx/
