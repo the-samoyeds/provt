@@ -1,23 +1,21 @@
 <template>
   <div class="full">
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <router-link to="/addfile" class="add-btn">
+      <i class="material-icons add-icon">note_add</i>
+      ADD FILE
+    </router-link>
 
-      <router-link :to="{ name: 'AddFile'}" class="add-btn">
-          <i class="material-icons add-icon">note_add</i>
-          ADD FILE
-      </router-link>
+    <metamask-checker>
+      <div v-show="isLoading">
+        <stretch></stretch></br>
+        Validating your file... Hold on tight!
+      </div>
 
-      <metamask-checker>
-        <div v-show="!isLoading" class="full">
-          Is this the file you were looking for?
-          <drop v-on:dropped="dropFile"></drop>
-        </div>
-        <div v-show="isLoading">
-          <stretch></stretch></br>
-          Validating your file... Hold on tight!
-        </div>
-      </metamask-checker>
+      <div v-show="!isLoading" class="full">
+        Is this the file you were looking for?
+        <drop v-on:dropped="verifyFile"></drop>
+      </div>
+    </metamask-checker>
   </div>
 </template>
 
@@ -32,7 +30,7 @@ import MetaMaskChecker from './MetaMaskChecker';
 export default {
   name: 'CheckFile',
   components: {
-    drop: Drop,
+    Drop,
     Stretch,
     'metamask-checker': MetaMaskChecker,
   },
@@ -44,7 +42,7 @@ export default {
   },
 
   methods: {
-    dropFile(name, digest) {
+    verifyFile(name, digest) {
       this.isLoading = true;
 
       web3.eth.contract(Provt)
@@ -55,7 +53,7 @@ export default {
             return;
           }
 
-          this.$router.push({ path: `/file/${data[2]}` });
+          this.$router.push({ path: `/file/${data[1]}` });
         });
     },
   },
@@ -104,5 +102,4 @@ a {
 .full {
   height: 100%;
 }
-
 </style>

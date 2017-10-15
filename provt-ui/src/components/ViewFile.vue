@@ -28,11 +28,11 @@ export default {
   },
 
   created() {
-    const metadataDigest = this.$route.params.digest;
+    const fileDigest = this.$route.params.digest;
 
     request
       .get('/api/file')
-      .query({ metadataDigest: metadataDigest.substring(2, metadataDigest.length) })
+      .query({ fileDigest: fileDigest.substring(2, fileDigest.length) })
       .end((err, resp) => {
         if (err) {
           this.error = 'Failed to load file information. Please try again.';

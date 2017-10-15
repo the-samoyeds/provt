@@ -1,15 +1,11 @@
 <template>
   <div class="full">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-
-    <router-link :to="{ name: 'CheckFile'}" class="add-btn">
-        <i class="material-icons add-icon">check_circle</i>
-        CHECK FILE
+    <router-link to="/" class="add-btn">
+      <i class="material-icons add-icon">check_circle</i>
+      CHECK FILE
     </router-link>
 
-    <div v-if="haveAccount" class="full">
+    <metamask-checker>
       <div v-show="fileDigest">
         <form>
           <label for="name">Name</label>
@@ -37,11 +33,7 @@
         Choose the file you want to add the information to the BlockChain
         <drop v-on:dropped="dropFile"></drop>
       </div>
-    </div>
-    <div v-else>
-      Create an account on
-      <a href="https://metamask.io/" target="_blank">MetaMask</a>
-    </div>
+    </metamask-checker>
   </div>
 </template>
 
@@ -50,6 +42,7 @@
 
 import SHA3_256 from 'js-sha3';
 import Drop from './Drop';
+import MetaMaskChecker from './MetaMaskChecker';
 import Provt from '../abi/provt';
 
 export default {
@@ -57,6 +50,7 @@ export default {
 
   components: {
     drop: Drop,
+    'metamask-checker': MetaMaskChecker,
   },
 
   data() {
@@ -182,14 +176,14 @@ span.code {
 }
 
 .add-btn {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    width: 94px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 94px;
 }
 
 .add-btn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .add-icon {
@@ -216,10 +210,8 @@ span.code {
   border: none;
 }
 
-
 .submit-btn:hover {
   background: #025682;
   background-image: linear-gradient(to bottom, #0370a9, #035884);
 }
-
 </style>
