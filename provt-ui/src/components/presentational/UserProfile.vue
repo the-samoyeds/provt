@@ -1,7 +1,7 @@
 <template>
 <div class="user-profile">
   <h2>
-    User Profile
+    Owner Profile
     <i class="material-icons">face</i>
   </h2>
   <div class="info-field">

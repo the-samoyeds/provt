@@ -74,7 +74,7 @@ export default {
     }
 
     .draggedover {
-      background-color: pink;
+      background-color: #d5e8f1;
     }
 
     .drop_text {

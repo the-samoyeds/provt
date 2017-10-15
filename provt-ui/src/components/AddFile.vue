@@ -33,7 +33,7 @@
           <input v-model="name" type="text" name="name" v-on:keyup="calculateMetaDigest"></input>
           <br/>
 
-          <label for="description">Description</label>
+          <label for="description" class="textarea-lbl">Description</label>
           <textarea v-model="description" type="text" name="description" v-on:keyup="calculateMetaDigest"></textarea>
           <br/><br/><br/><br/><br/>
 
@@ -254,6 +254,11 @@ span.code {
 
 .full {
   height: 100%;
+}
+
+.textarea-lbl {
+  vertical-align: top;
+  margin-top: 18px;
 }
 
 .submit-btn {
