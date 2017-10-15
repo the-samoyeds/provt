@@ -5,12 +5,24 @@
 </template>
 
 <script>
+const SHA3_256 = require('js-sha3').sha3_256;
+
 export default {
   name: 'Drop',
   methods: {
       dropHandler(ev) {
           ev.preventDefault();
-          this.$emit('dropped', ev);
+          const file = ev.dataTransfer.files[0];
+
+          let fileReader = new FileReader();
+
+          // FileReader is muy async.
+          let self = this;
+          fileReader.onloadend = function () {
+            self.$emit('dropped', file.name, SHA3_256(this.result));
+          };
+
+          fileReader.readAsBinaryString(file);
       },
       dragoverHandler(ev) {
           ev.preventDefault();

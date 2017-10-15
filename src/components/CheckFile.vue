@@ -51,7 +51,7 @@ export default {
       });
     },
 
-    dropFile() {
+    dropFile(name, digest) {
       this.isLoading = true;
       console.log('drop on check');
       // hash = calculateHash() => H function to create hash

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="haveAccount">
-      <div v-show="file">
+      <div v-show="fileDigest">
         <form>
           <label for="name">Name</label>
           <input v-model="name" type="text" name="name"></input>
@@ -12,7 +12,7 @@
           <br/>
 
           <label for="fileDigest">fileDigest</label>
-          <input v-model="fileDigest" type="text" name="fileDigest"></input>
+          <input v-model="fileDigest" type="hidden" name="fileDigest"></input>
           <br/>
 
           <!-- TODO: Implement "Add extra field" button. -->
@@ -21,7 +21,7 @@
           <button v-on:click="submitHandler">Submit</button>
         </form>
       </div>
-      <div v-show="!file">
+      <div v-show="!fileDigest">
         <drop v-on:dropped="dropFile"></drop>
       </div>
     </div>
@@ -49,7 +49,6 @@ export default {
 
   data() {
     return {
-      file: null,
       name: null,
       description: null,
       fileDigest: null,
@@ -67,6 +66,13 @@ export default {
       if (web3 === 'undefined') return;
 
       // TODO: POST form to backend.
+      // {
+      //   "file": {
+      //     "name": "...",
+      //     "description": "...",
+      //     "digest": "...",
+      //   }
+      // }
 
       // TODO: Create contract.
       let provtFileContract = new web3.auth.Contract(Provt);
@@ -82,19 +88,9 @@ export default {
       // TODO: POST transaction to backend.
     },
 
-    dropFile(event) {
-      this.file = event.dataTransfer.files[0];
-      this.name = this.file.name;
-
-      let fileReader = new FileReader();
-
-      // FileReader is muy async.
-      let self = this;
-      fileReader.onloadend = function (event) {
-        self.fileDigest = SHA3_256(this.result);
-      };
-
-      fileReader.readAsBinaryString(this.file);
+    dropFile(name, digest) {
+      this.name = name;
+      this.fileDigest = digest;
     },
   },
 
