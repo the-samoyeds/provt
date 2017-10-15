@@ -1,9 +1,7 @@
 .git
 contracts
 node_modules
-.babelrc
 .editorconfig
 .gitignore
-.postcssrs.js
 docker-compose.yaml
 README.md
