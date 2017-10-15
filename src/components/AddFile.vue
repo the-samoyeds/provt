@@ -2,6 +2,7 @@
   <div class="full">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     <router-link :to="{ name: 'CheckFile'}" class="add-btn">
         <i class="material-icons add-icon">check_circle</i>
@@ -12,21 +13,24 @@
       <div v-show="fileDigest">
         <form>
           <label for="name">Name</label>
-          <input v-model="name" type="text" name="name"></input>
+          <input v-model="name" type="text" name="name" v-on:keyup="calculateMetaDigest"></input>
           <br/>
 
           <label for="description">Description</label>
-          <input v-model="description" type="text" name="description"></input>
-          <br/>
+          <textarea v-model="description" type="text" name="description" v-on:keyup="calculateMetaDigest"></textarea>
+          <br/><br/><br/><br/><br/>
 
-          <label for="fileDigest">fileDigest</label>
-          <input v-model="fileDigest" type="hidden" name="fileDigest"></input>
+          <label class="digest-label" for="fileDigest">fileDigest:</label>
+          <span name="fileDigest">{{fileDigest}}</span>
+          <br/>
+          <label class="digest-label" for="metadataDigest">metadataDigest:</label>
+          <span name="metadataDigest">{{metadataDigest}}</span>
           <br/>
 
           <!-- TODO: Implement "Add extra field" button. -->
 
           <!-- TODO: Disable button until `readyForSubmission` -->
-          <button v-on:click="submitHandler">Submit</button>
+          <button class="submit-btn" v-on:click="submitHandler">Submit</button>
         </form>
       </div>
       <div v-show="!fileDigest" class="full">
@@ -61,13 +65,8 @@ export default {
       name: null,
       description: null,
       fileDigest: null,
+      metadataDigest: null,
     };
-  },
-
-  computed: {
-    metadataDigest: function () {
-      return SHA3_256(this.name + this.description + this.fileDigest);
-    },
   },
 
   methods: {
@@ -100,6 +99,11 @@ export default {
     dropFile(name, digest) {
       this.name = name;
       this.fileDigest = digest;
+      this.metadataDigest = SHA3_256(this.name + this.description + this.fileDigest);
+    },
+
+    calculateMetaDigest() {
+      this.metadataDigest = SHA3_256(this.name + this.description + this.fileDigest);
     },
   },
 
@@ -137,6 +141,42 @@ a {
   font-size: 25px;
 }
 
+label {
+  color: #024669;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 25px;
+  display: inline-block;
+  width: 140px;
+  text-align: right;
+}
+
+.digest-label {
+  width: 195px;
+}
+
+input {
+  height: 25px;
+  width: 470px;
+  border: none;
+  border-bottom: 1px solid #024669;
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+textarea {
+  width: 470px;
+  height: 75px;
+  border: none;
+  border-bottom: 1px solid #024669;
+  margin-top: 5px;
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+span {
+  width: 500px;
+}
+
 .add-btn {
     position: absolute;
     right: 20px;
@@ -156,4 +196,26 @@ a {
 .full {
   height: 100%;
 }
+
+.submit-btn {
+  margin-top: 50px;
+  width: 150px;
+  height: 50px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  background: #025682;
+  background-image: linear-gradient(to bottom, #025682, #024669);
+  border-radius: 10px;
+  color: #ffffff;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  border: none;
+}
+
+
+.submit-btn:hover {
+  background: #025682;
+  background-image: linear-gradient(to bottom, #0370a9, #035884);
+}
+
 </style>
