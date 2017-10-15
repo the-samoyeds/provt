@@ -10,12 +10,10 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'CheckFile',
       component: CheckFile,
     },
     {
       path: '/addfile',
-      name: 'AddFile',
       component: AddFile,
     },
     {

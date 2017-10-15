@@ -1,22 +1,19 @@
 <template>
 <metamask-checker v-on:web3-ready="onWeb3Ready">
   <div v-show="error">
-    <h1>Could not find "{{ displayFilename }}" on the Blockchain</h1>
+    <h2>Could not find "{{ displayFilename }}" on the Blockchain</h2>
 
     <b>Ooops!</b> {{ error }}
   </div>
 
-  <div v-show="!error">
-    <h1>Found "{{ displayFilename }}" on the Blockchain</h1>
-
-    <h2>User Profile</h2>
-    <user-profile :profile="profileInfo" v-show="Object.keys(profileInfo).length > 0"></user-profile>
-
-    <h2>File Information</h2>
-    <file :file="fileInfo" v-show="Object.keys(fileInfo).length > 0"></file>
-
-    <h2>Transaction</h2>
-    <transaction :transaction="txInfo"></transaction>
+  <div class="row" v-show="!error">
+    <div class="col-4 ml-auto">
+      <user-profile :profile="profileInfo" v-show="Object.keys(profileInfo).length > 0"></user-profile>
+    </div>
+    <div class="col-4 mr-auto">
+      <file :file="fileInfo" v-show="Object.keys(fileInfo).length > 0"></file>
+      <transaction :transaction="txInfo"></transaction>
+    </div>
   </div>
 
   <p class="view-file-try-again">
@@ -55,7 +52,7 @@ export default {
   computed: {
     displayFilename() {
       let displayFilename = '';
-      const maxFilenameLength = 30;
+      const maxFilenameLength = 50;
 
       const uploadedFilename = this.$route.params.filename;
 
@@ -150,5 +147,9 @@ export default {
 <style scoped>
 .view-file-try-again {
   margin-top: 60px;
+}
+
+div[class^="col-"] > div {
+  margin-bottom: 40px;
 }
 </style>
