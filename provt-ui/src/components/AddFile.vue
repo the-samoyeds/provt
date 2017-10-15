@@ -162,7 +162,7 @@ export default {
       .get('/api/profile')
       .query({ address: web3.eth.defaultAccount })
       .end((err, resp) => {
-        if (!err) {
+        if (!err && resp.body[0] !== undefined) {
           this.profileName = resp.body[0].name;
           this.profileCompany = resp.body[0].company;
           this.profileWebsite = resp.body[0].website;
