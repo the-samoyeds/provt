@@ -10,6 +10,11 @@
     <h1>Found "{{ displayFilename }}" on the Blockchain</h1>
 
     <h2>User Profile</h2>
+
+    <p v-show="this.vetted">
+      USER IS VETTED!!!
+    </p>
+
     <pre v-show="profileInfo && Object.keys(profileInfo).length > 0">
       {{ JSON.stringify(profileInfo, null, 2) }}
     </pre>
@@ -39,6 +44,7 @@
 
 import request from 'superagent';
 import MetaMaskChecker from './MetaMaskChecker';
+import ProvtUser from '../abi/provt_user';
 
 export default {
   components: {
@@ -50,6 +56,7 @@ export default {
       error: '',
       fileInfo: null,
       profileInfo: null,
+      vetted: false,
       transaction: null,
       web3Ready: false,
     };
@@ -136,7 +143,17 @@ export default {
               // return;
               this.profileInfo = { address: this.fileInfo.owner };
             } else {
+              const events = web3.eth.contract(ProvtUser).at('0x9793c8e6a58853651c96db6872e13cc30181dc9f').allEvents({
+                topics: ['0x0c89ed690c343654d9b258872b4fd91a851459b1', this.fileInfo.owner, null],
+              });
+
               this.profileInfo = resp2.body[0];
+
+              events.get((error, logs) => {
+                console.log(error); // eslint-disable-line no-console
+                console.log(logs); // eslint-disable-line no-console
+                this.vetted = (logs.length > 0);
+              });
             }
           });
       });
