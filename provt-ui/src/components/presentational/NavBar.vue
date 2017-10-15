@@ -39,6 +39,7 @@
 .header-menu {
   position: absolute;
   right: 0;
+  top: 24px;
   display: inline;
 }
 
