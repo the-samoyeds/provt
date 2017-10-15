@@ -55,7 +55,7 @@ export default {
         .at('0x0c89ed690c343654d9b258872b4fd91a851459b1')
         .getFile(`0x${digest}`, (err, data) => {
           if (err) {
-            console.error(err);
+            console.error(err); // eslint-disable-line no-console
             return;
           }
 
