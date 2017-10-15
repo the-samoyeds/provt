@@ -36,7 +36,7 @@ export default {
     #drop_zone {
       border: 1px dashed skyblue;
       width: 80%;
-      height: 120px;
+      height: calc(100% - 130px);
       margin-left: 10%;
       margin-top: 20px;
     }

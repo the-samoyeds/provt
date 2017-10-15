@@ -1,6 +1,14 @@
 <template>
-  <div>
-    <div v-if="haveAccount">
+  <div class="full">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+
+    <router-link :to="{ name: 'CheckFile'}" class="add-btn">
+        <i class="material-icons add-icon">check_circle</i>
+        CHECK FILE
+    </router-link>
+
+    <div v-if="haveAccount" class="full">
       <div v-show="fileDigest">
         <form>
           <label for="name">Name</label>
@@ -21,7 +29,8 @@
           <button v-on:click="submitHandler">Submit</button>
         </form>
       </div>
-      <div v-show="!fileDigest">
+      <div v-show="!fileDigest" class="full">
+        Choose the file you want to add the information to the BlockChain
         <drop v-on:dropped="dropFile"></drop>
       </div>
     </div>
@@ -122,20 +131,29 @@ li {
 }
 
 a {
-  color: #42b983;
+  color: #024669;
+  text-decoration: none;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 25px;
 }
 
-#drop_zone {
-  border: 1px dashed skyblue;
-  width: 70%;
-  height: 120px;
-  margin-left: 15%;
-  margin-top: 20px;
+.add-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 94px;
 }
 
-.drop_text {
-  font-size: 20px;
-  position: relative;
-  top: 46px;
+.add-btn:hover {
+    cursor: pointer;
+}
+
+.add-icon {
+  font-size: 60px;
+  color: #024669;
+}
+
+.full {
+  height: 100%;
 }
 </style>
