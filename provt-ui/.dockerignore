@@ -1,0 +1,7 @@
+.git
+contracts
+node_modules
+.editorconfig
+.gitignore
+docker-compose.yaml
+README.md

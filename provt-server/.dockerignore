@@ -1,0 +1,8 @@
+.git
+.vscode
+
+.editorconfig
+.eslintrc.json
+.gitignore
+docker-compose.yaml
+node_modules

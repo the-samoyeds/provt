@@ -1,0 +1,37 @@
+version: "2"
+services:
+  proxy:
+    image: nginx:stable
+    ports:
+      - "8080:80"
+    volumes_from:
+      - proxy-conf
+      - provt
+    links:
+      - provt-server
+  proxy-conf:
+    build:
+      context: ./provt-proxy-conf
+    image: samoyeds/provt-nginx-conf:0.1.0
+    entrypoint: /bin/true
+    volumes:
+      - /etc/nginx/conf.d
+  provt:
+    build:
+      context: ./provt-ui
+    image: samoyeds/provt:0.1.0
+    entrypoint: /bin/true
+    volumes:
+      - /app/dist
+
+  provt-server:
+    build:
+      context: ./provt-server
+    image: samoyeds/provt-server:0.1.0
+    environment:
+      - MONGO_URI=mongodb://mongo/provt
+    links:
+      - mongo
+
+  mongo:
+    image: mongo:3.4
