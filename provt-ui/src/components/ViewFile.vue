@@ -124,7 +124,7 @@ export default {
 
         request
           .get('/api/profile')
-          .query({ fileDigest: fileDigest.substring(2, fileDigest.length) })
+          .query({ address: this.fileInfo.owner })
           .end((err2, resp2) => {
             if (err2) {
               this.error = 'Failed to load file information. Please try again.';

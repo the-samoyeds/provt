@@ -6,7 +6,28 @@
     </router-link>
 
     <metamask-checker>
+
       <div v-show="fileDigest">
+        <h1>Profile Information (Optional)</h1>
+
+
+        <form>
+          <label for="profileName">Name</label>
+          <input v-model="profileName" type="text" name="profileName"></input>
+          <br/>
+
+          <label for="profileName">Company</label>
+          <input v-model="profileCompany" type="text" name="profileCompany"></input>
+          <br/>
+
+          <label for="profileWebsite">Website</label>
+          <input v-model="profileWebsite" type="text" name="profileWebsite"></input>
+          <br/>
+        </form>
+
+        <br/>
+
+        <h1>File Information</h1>
         <form>
           <label for="name">Name</label>
           <input v-model="name" type="text" name="name" v-on:keyup="calculateMetaDigest"></input>
@@ -29,6 +50,7 @@
           <button class="submit-btn" v-on:click="submitHandler">Submit</button>
         </form>
       </div>
+
       <div v-show="!fileDigest" class="full">
         Choose the file you want to add the information to the BlockChain
         <drop v-on:dropped="dropFile"></drop>
@@ -56,6 +78,9 @@ export default {
 
   data() {
     return {
+      profileName: null,
+      profileCompany: null,
+      profileWebsite: null,
       filename: null,
       name: null,
       description: null,
@@ -76,6 +101,20 @@ export default {
             console.error(err); // eslint-disable-line no-console
             return;
           }
+
+          request
+            .post('/api/profile')
+            .send({
+              address: web3.eth.defaultAccount,
+              name: this.profileName,
+              company: this.profileCompany,
+              website: this.profileWebsite,
+            })
+            .end((err2) => {
+              if (err2) {
+                console.error('Failed to save profile information. Please try again.'); // eslint-disable-line no-console
+              }
+            });
 
           request
             .post('/api/file')
@@ -118,6 +157,17 @@ export default {
   created() {
     if (web3 === 'undefined') return;
     this.haveAccount = web3.eth.accounts.length > 0;
+
+    request
+      .get('/api/profile')
+      .query({ address: web3.eth.defaultAccount })
+      .end((err, resp) => {
+        if (!err) {
+          this.profileName = resp.body[0].name;
+          this.profileCompany = resp.body[0].company;
+          this.profileWebsite = resp.body[0].website;
+        }
+      });
   },
 };
 </script>
