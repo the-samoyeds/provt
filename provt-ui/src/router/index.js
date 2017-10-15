@@ -19,7 +19,7 @@ export default new Router({
       component: AddFile,
     },
     {
-      path: '/file/:digest',
+      path: '/file/:digest/:filename?',
       component: ViewFile,
     },
   ],

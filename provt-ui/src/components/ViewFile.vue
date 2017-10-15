@@ -1,20 +1,24 @@
 <template>
 <div>
-  <h1>Found {{this.$route.params.filename ? this.$route.params.filename : this.fileInfo.filename}} on the Blockchain</h1>
-
   <p v-show="error">
+    <h1>Could not find {{this.$route.params.filename}} on the Blockchain</h1>
+
     <b>Ooops!</b> {{ error }}
   </p>
 
-  <h2>User Profile</h2>
-  <pre v-show="Object.keys(profileInfo).length > 0">
-    {{ JSON.stringify(profileInfo, null, 2) }}
-  </pre>
+  <div v-show="!error">
+    <h1>Found {{this.$route.params.filename ? this.$route.params.filename : this.fileInfo.filename}} on the Blockchain</h1>
 
-  <h2>File Information</h2>
-  <pre v-show="Object.keys(fileInfo).length > 0">
-    {{ JSON.stringify(fileInfo, null, 2) }}
-  </pre>
+    <h2>User Profile</h2>
+    <pre v-show="Object.keys(profileInfo).length > 0">
+      {{ JSON.stringify(profileInfo, null, 2) }}
+    </pre>
+
+    <h2>File Information</h2>
+    <pre v-show="Object.keys(fileInfo).length > 0">
+      {{ JSON.stringify(fileInfo, null, 2) }}
+    </pre>
+  </div>
 
   <p class="view-file-try-again">
     <router-link to="/">Check another file</router-link>
